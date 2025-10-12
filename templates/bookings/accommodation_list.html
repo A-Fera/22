@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}Accommodations - Safar Sathi{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="text-white fw-bold text-center mb-4">
+                <i class="fas fa-bed me-3"></i>Find Perfect Accommodations
+            </h2>
+        </div>
+    </div>
+    
+    <!-- Search and Filter -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" name="search" placeholder="Search by name or location..." value="{{ request.GET.search }}">
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-control" name="type">
+                                <option value="">All Types</option>
+                                {% for value, label in accommodation_types %}
+                                    <option value="{{ value }}" {% if value == request.GET.type %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-search me-2"></i>Search
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Accommodations Grid -->
+    <div class="row">
+        {% for accommodation in accommodations %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="position-relative">
+                        {% if accommodation.image %}
+                            <img src="{{ accommodation.image.url }}" class="card-img-top" alt="{{ accommodation.name }}" style="height: 200px; object-fit: cover;">
+                        {% else %}
+                            <div class="bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <i class="fas fa-bed fa-3x text-white"></i>
+                            </div>
+                        {% endif %}
+                        <div class="position-absolute top-0 end-0 m-2">
+                            <span class="badge bg-primary">{{ accommodation.get_accommodation_type_display }}</span>
+                        </div>
+                        {% if accommodation.rating > 0 %}
+                            <div class="position-absolute top-0 start-0 m-2">
+                                <span class="badge bg-warning">
+                                    <i class="fas fa-star me-1"></i>{{ accommodation.rating }}
+                                </span>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ accommodation.name }}</h5>
+                        <p class="text-muted mb-2">
+                            <i class="fas fa-map-marker-alt me-2"></i>{{ accommodation.destination.name }}
+                        </p>
+                        <p class="text-muted mb-2">
+                            <i class="fas fa-users me-2"></i>Up to {{ accommodation.max_guests }} guests
+                        </p>
+                        <p class="card-text">{{ accommodation.description|truncatewords:15 }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="fw-bold text-success">৳{{ accommodation.price_per_night }}</span>
+                                <small class="text-muted">/night</small>
+                            </div>
+                            <div>
+                                <a href="{% url 'bookings:accommodation_detail' accommodation.pk %}" class="btn btn-outline-primary btn-sm me-2">
+                                    View
+                                </a>
+                                <a href="{% url 'bookings:book_accommodation' accommodation.pk %}" class="btn btn-primary btn-sm">
+                                    Book
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12 text-center">
+                <div class="card">
+                    <div class="card-body py-5">
+                        <i class="fas fa-bed fa-4x text-muted mb-3"></i>
+                        <h4>No accommodations found</h4>
+                        <p class="text-muted">Try adjusting your search criteria.</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Add Accommodation Button for Staff -->
+    {% if user.is_staff %}
+        <div class="row mt-4">
+            <div class="col-12 text-center">
+                <a href="{% url 'bookings:accommodation_create' %}" class="btn btn-success btn-lg">
+                    <i class="fas fa-plus me-2"></i>Add New Accommodation
+                </a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

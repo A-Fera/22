@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block title %}My Itineraries - Safar Sathi{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="text-white fw-bold mb-2">
+                        <i class="fas fa-route me-3"></i>My Travel Itineraries
+                    </h2>
+                    <p class="text-light">Plan and organize your dream trips</p>
+                </div>
+                <div>
+                    <a href="{% url 'itinerary:itinerary_create' %}" class="btn btn-success btn-lg">
+                        <i class="fas fa-plus me-2"></i>Create New Itinerary
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        {% for itinerary in itineraries %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">{{ itinerary.title }}</h5>
+                        <span class="badge 
+                            {% if itinerary.status == 'planning' %}bg-info
+                            {% elif itinerary.status == 'confirmed' %}bg-success
+                            {% elif itinerary.status == 'ongoing' %}bg-warning
+                            {% elif itinerary.status == 'completed' %}bg-primary
+                            {% else %}bg-secondary{% endif %}">
+                            {{ itinerary.get_status_display }}
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        {% if itinerary.description %}
+                            <p class="card-text">{{ itinerary.description|truncatewords:20 }}</p>
+                        {% endif %}
+                        
+                        <div class="row text-center mb-3">
+                            <div class="col-4">
+                                <i class="fas fa-calendar text-primary"></i>
+                                <div><small>{{ itinerary.total_days }} days</small></div>
+                            </div>
+                            <div class="col-4">
+                                <i class="fas fa-map-marker-alt text-success"></i>
+                                <div><small>{{ itinerary.total_destinations }} places</small></div>
+                            </div>
+                            <div class="col-4">
+                                <i class="fas fa-list text-info"></i>
+                                <div><small>{{ itinerary.total_items }} items</small></div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar-alt me-1"></i>
+                                {{ itinerary.start_date|date:"M d" }} - {{ itinerary.end_date|date:"M d, Y" }}
+                            </small>
+                        </div>
+                        
+                        {% if itinerary.total_cost %}
+                            <div class="mb-3">
+                                <small class="text-success">
+                                    <i class="fas fa-money-bill me-1"></i>
+                                    Estimated: ৳{{ itinerary.total_cost }}
+                                </small>
+                            </div>
+                        {% endif %}
+                        
+                        {% if itinerary.is_public %}
+                            <div class="mb-3">
+                                <span class="badge bg-info">
+                                    <i class="fas fa-globe me-1"></i>Public
+                                </span>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer">
+                        <div class="btn-group w-100">
+                            <a href="{% url 'itinerary:itinerary_detail' itinerary.pk %}" class="btn btn-primary">
+                                <i class="fas fa-eye me-1"></i>View
+                            </a>
+                            <a href="{% url 'itinerary:itinerary_update' itinerary.pk %}" class="btn btn-warning">
+                                <i class="fas fa-edit me-1"></i>Edit
+                            </a>
+                            <a href="{% url 'itinerary:itinerary_delete' itinerary.pk %}" class="btn btn-danger" onclick="return confirm('Are you sure?')">
+                                <i class="fas fa-trash me-1"></i>Delete
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body text-center py-5">
+                        <i class="fas fa-route fa-4x text-muted mb-3"></i>
+                        <h4>No Itineraries Yet</h4>
+                        <p class="text-muted">Start planning your first trip by creating an itinerary!</p>
+                        <a href="{% url 'itinerary:itinerary_create' %}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-plus me-2"></i>Create Your First Itinerary
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

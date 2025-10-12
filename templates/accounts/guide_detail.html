@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ guide.user.get_full_name }} - Guide Profile - Safar Sathi{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-5">
+    <!-- Admin Controls -->
+    {% if user.is_staff %}
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="alert alert-info d-flex justify-content-between align-items-center">
+                    <span><i class="fas fa-shield-alt me-2"></i>Admin Panel</span>
+                    <div>
+                        <a href="{% url 'accounts:guide_update' guide.pk %}" class="btn btn-warning btn-sm me-2">
+                            <i class="fas fa-edit me-1"></i>Edit Guide
+                        </a>
+                        <a href="{% url 'accounts:guide_delete' guide.pk %}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this guide?')">
+                            <i class="fas fa-trash me-1"></i>Delete Guide
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <!-- Guide Profile -->
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    {% if guide.guide_photo %}
+                        <img src="{{ guide.guide_photo.url }}" alt="{{ guide.user.get_full_name }}" class="rounded-circle mb-3" width="200" height="200" style="object-fit: cover;">
+                    {% else %}
+                        <div class="bg-secondary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 200px; height: 200px;">
+                            <i class="fas fa-user fa-4x text-white"></i>
+                        </div>
+                    {% endif %}
+
+                    <h3>{{ guide.user.get_full_name }}</h3>
+                    <p class="text-muted">Local Guide</p>
+
+                    <div class="rating mb-3">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= guide.rating %}
+                                <i class="fas fa-star text-warning"></i>
+                            {% else %}
+                                <i class="far fa-star text-muted"></i>
+                            {% endif %}
+                        {% endfor %}
+                        <span class="ms-2">{{ guide.rating }}/5</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <span class="badge bg-success fs-6">Verified Guide</span>
+                    </div>
+
+                    <div class="text-center">
+                        <span class="h4 text-primary">৳{{ guide.hourly_rate }}</span>
+                        <span class="text-muted">/hour</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Guide Details -->
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4><i class="fas fa-user me-2"></i>About {{ guide.user.first_name }}</h4>
+                    <p>{{ guide.description }}</p>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-map-marker-alt me-2"></i>Region</h6>
+                            <p>{{ guide.region }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-language me-2"></i>Languages</h6>
+                            <p>{{ guide.languages }}</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-calendar me-2"></i>Experience</h6>
+                            <p>{{ guide.experience_years }} years</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-phone me-2"></i>Contact</h6>
+                            <p>{{ guide.phone }}</p>
+                        </div>
+                    </div>
+
+                    {% if guide.references %}
+                        <div class="mt-4">
+                            <h6><i class="fas fa-certificate me-2"></i>References</h6>
+                            <p>{{ guide.references }}</p>
+                        </div>
+                    {% endif %}
+
+                    <div class="mt-4">
+                        <small class="text-muted">
+                            <i class="fas fa-clock me-1"></i>Profile created on {{ guide.created_at|date:"F d, Y" }}
+                            {% if guide.updated_at != guide.created_at %}
+                                • Last updated {{ guide.updated_at|date:"F d, Y" }}
+                            {% endif %}
+                        </small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Reviews -->
+            {% if reviews %}
+                <div class="card">
+                    <div class="card-body">
+                        <h4><i class="fas fa-star me-2"></i>Reviews</h4>
+                        {% for review in reviews %}
+                            <div class="border-bottom pb-3 mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <h6>{{ review.title }}</h6>
+                                    <div class="rating">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= review.rating %}
+                                                <i class="fas fa-star text-warning"></i>
+                                            {% else %}
+                                                <i class="far fa-star text-muted"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <p>{{ review.content }}</p>
+                                <small class="text-muted">By {{ review.user.username }} on {{ review.created_at|date:"M d, Y" }}</small>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% else %}
+                <div class="card">
+                    <div class="card-body text-center py-4">
+                        <i class="fas fa-comment-slash fa-3x text-muted mb-3"></i>
+                        <h5>No reviews yet</h5>
+                        <p class="text-muted">Be the first to review this guide's services!</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}Booking Details - Safar Sathi{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-receipt me-2"></i>Booking Details</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <h4>{{ booking.accommodation.name }}</h4>
+                            <p class="text-muted">{{ booking.accommodation.destination.name }}</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <span class="badge 
+                                {% if booking.booking_status == 'confirmed' %}bg-success
+                                {% elif booking.booking_status == 'pending' %}bg-warning
+                                {% elif booking.booking_status == 'cancelled' %}bg-danger
+                                {% else %}bg-secondary{% endif %} fs-6">
+                                {{ booking.get_booking_status_display }}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-calendar-check me-2"></i>Check-in</h6>
+                            <p>{{ booking.check_in_date|date:"F d, Y" }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-calendar-times me-2"></i>Check-out</h6>
+                            <p>{{ booking.check_out_date|date:"F d, Y" }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-users me-2"></i>Guests</h6>
+                            <p>{{ booking.number_of_guests }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-money-bill me-2"></i>Total Amount</h6>
+                            <p class="text-success fw-bold">৳{{ booking.total_amount }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-credit-card me-2"></i>Payment Status</h6>
+                            <span class="badge 
+                                {% if booking.payment_status == 'paid' %}bg-success
+                                {% elif booking.payment_status == 'pending' %}bg-warning
+                                {% else %}bg-danger{% endif %}">
+                                {{ booking.get_payment_status_display }}
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-clock me-2"></i>Booked On</h6>
+                            <p>{{ booking.created_at|date:"F d, Y" }}</p>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="text-center">
+                        <a href="{% url 'bookings:my_bookings' %}" class="btn btn-secondary me-2">
+                            <i class="fas fa-arrow-left me-2"></i>Back to My Bookings
+                        </a>
+                        <a href="{% url 'bookings:accommodation_detail' booking.accommodation.pk %}" class="btn btn-primary">
+                            <i class="fas fa-bed me-2"></i>View Accommodation
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h1 class="display-4 fw-bold mb-4">
+                    Discover Amazing Destinations in Bangladesh
+                </h1>
+                <p class="lead mb-5">
+                    Your trusted companion for unforgettable journeys. Explore destinations, find local guides, and book perfect accommodations.
+                </p>
+                <div class="d-flex gap-3 justify-content-center">
+                    <a href="{% url 'destinations:destination_list' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-search me-2"></i>Explore Destinations
+                    </a>
+                    <a href="{% url 'accounts:guide_list' %}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-user-friends me-2"></i>Find Guides
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="fw-bold text-white mb-4">Why Choose Safar Sathi?</h2>
+                <p class="text-light">Experience the best of travel with our comprehensive platform</p>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <div class="feature-icon">
+                            <i class="fas fa-map-marked-alt"></i>
+                        </div>
+                        <h5 class="card-title">Amazing Destinations</h5>
+                        <p class="card-text">Discover breathtaking locations with detailed information and stunning photos.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-friends"></i>
+                        </div>
+                        <h5 class="card-title">Expert Local Guides</h5>
+                        <p class="card-text">Connect with verified local guides who know the best spots and hidden gems.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <div class="feature-icon">
+                            <i class="fas fa-bed"></i>
+                        </div>
+                        <h5 class="card-title">Perfect Accommodations</h5>
+                        <p class="card-text">Book from a wide range of accommodations that suit your budget and preferences.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <div class="feature-icon">
+                            <i class="fas fa-route"></i>
+                        </div>
+                        <h5 class="card-title">Itinerary Planning</h5>
+                        <p class="card-text">Plan your perfect trip with our comprehensive itinerary management system.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-lg-3 col-6 mb-4">
+                <div class="glass-effect rounded p-4">
+                    <h3 class="text-white fw-bold">500+</h3>
+                    <p class="text-light mb-0">Destinations</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6 mb-4">
+                <div class="glass-effect rounded p-4">
+                    <h3 class="text-white fw-bold">1000+</h3>
+                    <p class="text-light mb-0">Happy Travelers</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6 mb-4">
+                <div class="glass-effect rounded p-4">
+                    <h3 class="text-white fw-bold">200+</h3>
+                    <p class="text-light mb-0">Local Guides</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6 mb-4">
+                <div class="glass-effect rounded p-4">
+                    <h3 class="text-white fw-bold">50+</h3>
+                    <p class="text-light mb-0">Cities Covered</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <div class="card glass-effect">
+                    <div class="card-body p-5">
+                        <h3 class="text-white fw-bold mb-4">Ready to Start Your Adventure?</h3>
+                        <p class="text-light mb-4">Join thousands of travelers who have discovered amazing places with Safar Sathi</p>
+                        {% if not user.is_authenticated %}
+                            <a href="{% url 'accounts:signup' %}" class="btn btn-primary btn-lg">
+                                <i class="fas fa-user-plus me-2"></i>Join Now - It's Free!
+                            </a>
+                        {% else %}
+                            <div class="d-flex gap-3 justify-content-center">
+                                <a href="{% url 'destinations:destination_list' %}" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-compass me-2"></i>Start Exploring
+                                </a>
+                                <a href="{% url 'itinerary:itinerary_list' %}" class="btn btn-success btn-lg">
+                                    <i class="fas fa-route me-2"></i>Plan Your Trip
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
