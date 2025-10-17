@@ -8,9 +8,9 @@ def home(request):
     return render(request, 'home.html')
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', home, name='home'),
-    path('accounts/', include('accounts.urls')),
+#    path('admin/', admin.site.urls),
+#    path('', home, name='home'),
+#    path('accounts/', include('accounts.urls')),
     path('destinations/', include('destinations.urls')),
     path('bookings/', include('bookings.urls')),
     path('reviews/', include('reviews.urls')),  # Add this line
